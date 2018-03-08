@@ -1,0 +1,240 @@
+<html>
+<head>
+<title> My First ERC20 web page
+</title>
+</head>
+<body>
+	<body bgcolor="pink";
+	<legend>TOKENS</legend>
+	<marquee>Simple Transaction</marquee>
+<table>
+  <tr>
+	<td>TotalSupply</td>
+	<td><input type="button" id="totalname" value="submit"/></td>
+	<td><pre id="hashresult1"></pre></td>
+	</tr>
+<tr>
+	<td>Mint</td>
+	<td><input type="text" id="mint_id" name="mint_name" /></td>
+	<td><input type="button" id="b_id" value="submit"/></td>
+	<td><pre id="hashresult2"></pre></td>
+	</tr>
+<tr>
+	<td>transfer</td>
+	<td><input type="text" id="trans_id" name="trans_addr"/></td>
+	<td><input type="text" id="transid" name="token_amnt"/></td>
+	<td><input type="button" id="but_id" value="submit"/></td>
+	<td><pre id="hashresult3"></pre></td>
+	</tr>	
+</table>	
+	<script>
+   
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+
+        var cont = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalsupply",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "mint",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"name": "tokens",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]);
+
+        var con_add = cont.at('0x6f9c2fe8d3c10f41356831e4aecce3fe66015cd0'); 
+
+	var totname_btn= document.getElementById('totalname');
+     	
+	var mint_btn=document.getElementById('b_id');	
+	var mint_name=document.getElementById('mint_id')	
+
+	var transbut=document.getElementById('but_id');	
+	var trans_addr = document.getElementById('trans_id');
+	var tokens_amnt=document.getElementById('transid');
+	
+
+	var output1 = document.getElementById('hashresult1');
+	var output2 = document.getElementById('hashresult2');
+	var output3 = document.getElementById('hashresult3');
+	
+     	
+    	 if(!web3.isConnected()) {
+  
+    	    console.log("Ok");
+        
+    	  } else {
+    	    console.log("no");
+   	   }
+   	   web3.version.getNetwork((err, netId) => {
+            switch (netId) {
+              case "1":
+                console.log('This is mainnet')
+                break
+              case "2":
+                console.log('This is the deprecated Morden test network.')
+                break
+              case "3":
+                console.log('This is the ropsten test network.')
+                break
+              case "4":
+                console.log('This is the Rinkeby test network.')
+                break
+              case "42":
+                console.log('This is the Kovan test network.')
+                break
+              default:
+                console.log('This is an unknown network.')
+            }
+        })
+
+
+	totname_btn.addEventListener('click',function(){
+          return con_add.totalSupply( function (error,result){
+            if (!error) {
+              output1.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+              output2.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+
+ 	mint_btn.addEventListener('click',function(){
+          return con_add.mint(mint_name.value, function (error,result){
+            if (!error) {
+              output2.innerHTML = result;
+              console.log(result);
+                             
+            } else {
+             output3.innerHTML = "Error";
+              console.error(error);
+            }
+        });
+      });
+
+	transbut.addEventListener('click',function(){
+	return con_add.transfer(trans_addr.value,tokens_amnt.value,function (error,result) {
+		if (!error) {
+		  output3.innerHTML = result;
+		  console.log(result);
+		}
+		else {
+		output4.innerHTML = "Error";
+		  console.error(error);
+	}
+      });
+      });
+</script>
+</body>
+</html>
